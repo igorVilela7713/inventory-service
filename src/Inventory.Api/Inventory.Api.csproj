@@ -9,5 +9,6 @@
     <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="4.*" />
     <PackageReference Include="prometheus-net.AspNetCore" Version="8.*" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="7.*" />
+    <PackageReference Include="AspNetCore.HealthChecks.Npgsql" Version="8.*" />
   </ItemGroup>
 </Project>
