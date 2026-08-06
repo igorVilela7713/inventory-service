@@ -9,10 +9,9 @@ public static class ReservationEndpoints
     public static void MapReservationEndpoints(this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/api/v1/reservations")
-            .WithTags("Reservations")
-            .WithOpenApi();
+            .WithTags("Reservations");
 
-        group.MapPost("/", async (CreateReservationRequest request, IValidator<CreateReservationRequest> validator, InventoryService svc) =>
+        group.MapPost("/", async Task<IResult> (CreateReservationRequest request, IValidator<CreateReservationRequest> validator, InventoryService svc) =>
         {
             var validation = await validator.ValidateAsync(request);
             if (!validation.IsValid)
@@ -24,7 +23,7 @@ public static class ReservationEndpoints
         .Produces<Inventory.Domain.Entities.Reservation>(201)
         .ProducesValidationProblem();
 
-        group.MapDelete("/{id:guid}", async (Guid id, InventoryService svc) =>
+        group.MapDelete("/{id:guid}", async Task<IResult> (Guid id, InventoryService svc) =>
         {
             await svc.CancelReservationAsync(id);
             return Results.NoContent();
