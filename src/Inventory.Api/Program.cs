@@ -1,4 +1,4 @@
-using FluentValidation;
+using FluentValidation.DependencyInjectionExtensions;
 using Inventory.Application.Interfaces;
 using Inventory.Application.Services;
 using Inventory.Application.Validators;
