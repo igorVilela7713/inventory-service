@@ -77,8 +77,11 @@ public class InventoryServiceTests
         var stock = new StockItem { Id = Guid.NewGuid(), ProductId = "PROD-001", Quantity = 10, ReservedQuantity = 3 };
         var reservation = new Reservation
         {
-            Id = Guid.NewGuid(), OrderId = "ORD-001", ProductId = "PROD-001",
-            Quantity = 3, Status = Domain.Enums.ReservationStatus.Confirmed
+            Id = Guid.NewGuid(),
+            OrderId = "ORD-001",
+            ProductId = "PROD-001",
+            Quantity = 3,
+            Status = Domain.Enums.ReservationStatus.Confirmed
         };
         _reservationRepo.Setup(r => r.GetByIdAsync(reservation.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(reservation);
