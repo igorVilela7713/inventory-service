@@ -1,8 +1,7 @@
-using FluentValidation.DependencyInjectionExtensions;
+using FluentValidation;
 using Inventory.Application.Interfaces;
 using Inventory.Application.Services;
 using Inventory.Application.Validators;
-using Inventory.Infrastructure.Cache;
 using Inventory.Infrastructure.Persistence;
 using Inventory.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
