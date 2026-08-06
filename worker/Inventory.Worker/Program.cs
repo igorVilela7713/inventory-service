@@ -5,16 +5,8 @@ using Inventory.Infrastructure.Persistence.Repositories;
 using Inventory.Worker.Consumers;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
 
 var builder = Host.CreateApplicationBuilder(args);
-
-Log.Logger = new LoggerConfiguration()
-    .ReadFrom.Configuration(builder.Configuration)
-    .Enrich.FromLogContext()
-    .WriteTo.Console()
-    .CreateLogger();
-builder.Host.UseSerilog();
 
 // EF Core
 builder.Services.AddDbContext<InventoryDbContext>(opts =>
