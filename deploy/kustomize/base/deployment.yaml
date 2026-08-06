@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory-api
+  labels:
+    app: inventory-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: inventory-api
+  template:
+    metadata:
+      labels:
+        app: inventory-api
+    spec:
+      containers:
+        - name: api
+          image: inventory-service:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ConnectionStrings__DefaultConnection
+              valueFrom:
+                secretKeyRef:
+                  name: inventory-secrets
+                  key: connection-string
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          startupProbe:
+            httpGet:
+              path: /health/ready
+              port: 8080
+            failureThreshold: 30
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi

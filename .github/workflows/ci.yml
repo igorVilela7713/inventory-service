@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.x'
+
+      - name: Build
+        run: dotnet build -c Release
+
+      - name: Test
+        run: dotnet test -c Release --collect:"XPlat Code Coverage"
+
+      - name: Upload coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: '**/coverage.cobertura.xml'
+          retention-days: 7
+
+  lint:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.x'
+
+      - name: Format check
+        run: dotnet format --verify-no-changes
+
+  docker:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t inventory-service:${{ github.sha }} .
+
+  k8s:
+    name: K8s Validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate Kustomize manifests
+        uses: yannh/kubeconform-action@v0.7
+        with:
+          args: "-strict -summary deploy/kustomize/base/"
+
+      - name: Lint Helm chart
+        run: |
+          curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+          helm lint deploy/helm/inventory-service/

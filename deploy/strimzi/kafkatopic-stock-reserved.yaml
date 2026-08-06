@@ -1,0 +1,9 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: inv.stock-reserved
+  labels:
+    strimzi.io/cluster: inventory-kafka
+spec:
+  partitions: 3
+  replicas: 1

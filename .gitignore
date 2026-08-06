@@ -1,0 +1,36 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.vs/
+.vscode/
+*.DotSettings.user
+
+# Build
+publish/
+*.nupkg
+*.snupkg
+TestResults/
+
+# IDE
+.idea/
+*.swp
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Docker
+docker-compose.override.yml
+
+# Secrets
+*.pem
+*.key
+appsettings.*.Local.json
+
+# Hermes temp
+.hermes-tmp*

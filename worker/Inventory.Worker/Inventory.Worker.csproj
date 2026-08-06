@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Inventory.Application\Inventory.Application.csproj" />
+    <ProjectReference Include="..\..\src\Inventory.Infrastructure\Inventory.Infrastructure.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MassTransit.Kafka" Version="9.*" />
+    <PackageReference Include="Serilog.AspNetCore" Version="8.*" />
+  </ItemGroup>
+</Project>
