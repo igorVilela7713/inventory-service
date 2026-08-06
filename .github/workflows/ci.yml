@@ -67,7 +67,7 @@ jobs:
       - name: Validate Kustomize manifests
         run: |
           curl -sSL https://github.com/yannh/kubeconform/releases/latest/download/kubeconform-linux-amd64.tar.gz | tar xz
-          ./kubeconform -strict -summary deploy/kustomize/base/
+          ./kubeconform -strict -summary -skip Kustomization deploy/kustomize/base/
 
       - name: Lint Helm chart
         run: |
