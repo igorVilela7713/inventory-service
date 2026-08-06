@@ -1,3 +1,4 @@
+using Inventory.Api.Endpoints;
 using FluentValidation;
 using Inventory.Application.Interfaces;
 using Inventory.Application.Services;
