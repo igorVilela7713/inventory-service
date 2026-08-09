@@ -58,6 +58,9 @@ jobs:
       - name: Build Docker image
         run: docker build -t inventory-service:${{ github.sha }} .
 
+      - name: Build Worker Docker image
+        run: docker build -f Dockerfile.worker -t inventory-worker:${{ github.sha }} .
+
   k8s:
     name: K8s Validation
     runs-on: ubuntu-latest
