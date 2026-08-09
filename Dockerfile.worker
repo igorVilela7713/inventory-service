@@ -1,0 +1,25 @@
+# Stage 1: Build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /src
+
+# Copy solution and project files for layer caching
+COPY *.sln Directory.Build.props ./
+COPY src/Inventory.Domain/ src/Inventory.Domain/
+COPY src/Inventory.Application/ src/Inventory.Application/
+COPY src/Inventory.Infrastructure/ src/Inventory.Infrastructure/
+COPY worker/Inventory.Worker/ worker/Inventory.Worker/
+
+RUN dotnet restore worker/Inventory.Worker/Inventory.Worker.csproj
+RUN dotnet publish worker/Inventory.Worker/Inventory.Worker.csproj -c Release -o /app/publish --no-restore
+
+# Stage 2: Runtime
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
+WORKDIR /app
+
+COPY --from=build /app/publish .
+
+ENV DOTNET_EnableDiagnostics=0
+
+# Process-level liveness: PID 1 is the worker process
+HEALTHCHECK --interval=30s --timeout=3s CMD kill -0 1 || exit 1
+ENTRYPOINT ["dotnet", "Inventory.Worker.dll"]
